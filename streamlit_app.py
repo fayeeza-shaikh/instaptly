@@ -51,7 +51,7 @@ VIBE_EMOJI = {
 # ---------------------------------------------------------------------------
 # PAGE + STYLE  (Sunset Pop)
 # ---------------------------------------------------------------------------
-st.set_page_config(page_title="Instaptly", page_icon="✨", layout="centered")
+st.set_page_config(page_title="Instaptly", page_icon="✨", layout="wide")
 
 st.markdown(
 """
@@ -61,6 +61,10 @@ st.markdown(
               --ink:#2B2D42; --cream:#FFF3EC; }
 
       html, body, [class*="css"] { font-family: 'Poppins', sans-serif; }
+      /* Trim Streamlit's default whitespace and use the full width */
+      .block-container { padding-top: 2.2rem; padding-bottom: 3rem;
+                         padding-left: 3rem; padding-right: 3rem;
+                         max-width: 100%; }
       .stApp { background:
           radial-gradient(1200px 500px at 80% -10%, #ffe9db 0%, transparent 60%),
           var(--cream); }
