@@ -183,29 +183,31 @@ tone = TONES[vibe_labels.index(chosen)]
 tags_per = st.slider("Hashtags per caption", 0, 10, 3)
 
 st.markdown('<h3 class="section">2 · Add your photo</h3>', unsafe_allow_html=True)
-photo = st.file_uploader(
-    "Photo", type=["png", "jpg", "jpeg", "webp"],
-    help="Your photo is analyzed in memory and never stored.",
-    label_visibility="collapsed",
-)
-
-if photo is not None:
-    st.image(photo, caption="Preview", use_container_width=True)
-else:
-    # Empty-state: quick "how it works" strip.
-    st.markdown(
-        """
-        <div class="steps">
-          <div class="step"><div class="n">📸</div><div class="t">Upload</div>
-            <div class="d">Drop in any photo</div></div>
-          <div class="step"><div class="n">🎨</div><div class="t">Pick a vibe</div>
-            <div class="d">Six moods to match</div></div>
-          <div class="step"><div class="n">✨</div><div class="t">Get captions</div>
-            <div class="d">Post-ready + hashtags</div></div>
-        </div>
-        """,
-        unsafe_allow_html=True,
+up_col, prev_col = st.columns([1, 1])
+with up_col:
+    photo = st.file_uploader(
+        "Photo", type=["png", "jpg", "jpeg", "webp"],
+        help="Your photo is analyzed in memory and never stored.",
+        label_visibility="collapsed",
     )
+with prev_col:
+    if photo is not None:
+        st.image(photo, caption="Preview", use_container_width=True)
+    else:
+        # Empty-state: quick "how it works" strip, beside the uploader.
+        st.markdown(
+            """
+            <div class="steps">
+              <div class="step"><div class="n">📸</div><div class="t">Upload</div>
+                <div class="d">Drop in any photo</div></div>
+              <div class="step"><div class="n">🎨</div><div class="t">Pick a vibe</div>
+                <div class="d">Six moods to match</div></div>
+              <div class="step"><div class="n">✨</div><div class="t">Get captions</div>
+                <div class="d">Post-ready + hashtags</div></div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
 go = st.button("✨ Generate captions", disabled=(photo is None))
 
@@ -231,26 +233,37 @@ if go and photo is not None:
             f'<h3 class="section">{VIBE_EMOJI.get(tone, "")} {tone} captions</h3>',
             unsafe_allow_html=True,
         )
-        for i, cap in enumerate(captions, 1):
-            text = html.escape(cap.get("text", ""))
-            pills = "".join(
-                f'<span class="pill">{html.escape(t)}</span>'
-                for t in cap.get("hashtags", [])
-            )
-            tag_html = f'<hr class="divider">{pills}' if pills else ""
-            st.markdown(
-                f"""
-                <div class="cap-card">
-                  <div class="cap-text"><span class="cap-num">{i}</span>{text}</div>
-                  {tag_html}
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-            copy_text = cap.get("text", "")
-            tags = " ".join(cap.get("hashtags", []))
-            with st.expander("📋 Copy"):
-                st.code(copy_text if not tags else f"{copy_text}\n\n{tags}", language=None)
+        # Lay caption cards out in a horizontal grid (2 per row).
+        per_row = 2
+        for start in range(0, len(captions), per_row):
+            row = st.columns(per_row)
+            for col, (offset, cap) in zip(
+                row, enumerate(captions[start:start + per_row])
+            ):
+                i = start + offset + 1
+                text = html.escape(cap.get("text", ""))
+                pills = "".join(
+                    f'<span class="pill">{html.escape(t)}</span>'
+                    for t in cap.get("hashtags", [])
+                )
+                tag_html = f'<hr class="divider">{pills}' if pills else ""
+                with col:
+                    st.markdown(
+                        f"""
+                        <div class="cap-card">
+                          <div class="cap-text"><span class="cap-num">{i}</span>{text}</div>
+                          {tag_html}
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+                    copy_text = cap.get("text", "")
+                    tags = " ".join(cap.get("hashtags", []))
+                    with st.expander("📋 Copy"):
+                        st.code(
+                            copy_text if not tags else f"{copy_text}\n\n{tags}",
+                            language=None,
+                        )
 
 # ---------------------------------------------------------------------------
 # FOOTER
