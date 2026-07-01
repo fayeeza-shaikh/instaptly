@@ -172,42 +172,28 @@ st.markdown(
 # ---------------------------------------------------------------------------
 # CONTROLS
 # ---------------------------------------------------------------------------
-st.markdown('<h3 class="section">1 · Pick a vibe</h3>', unsafe_allow_html=True)
-vibe_labels = [f"{VIBE_EMOJI.get(t, '')} {t}".strip() for t in TONES]
-chosen = st.radio(
-    "Vibe", vibe_labels, index=TONES.index("Aesthetic"),
-    horizontal=True, label_visibility="collapsed",
-)
-tone = TONES[vibe_labels.index(chosen)]
+# Steps 1 and 2 sit side by side in one horizontal row.
+vibe_col, photo_col = st.columns([1, 1])
 
-tags_per = st.slider("Hashtags per caption", 0, 10, 3)
+with vibe_col:
+    st.markdown('<h3 class="section">1 · Pick a vibe</h3>', unsafe_allow_html=True)
+    vibe_labels = [f"{VIBE_EMOJI.get(t, '')} {t}".strip() for t in TONES]
+    chosen = st.radio(
+        "Vibe", vibe_labels, index=TONES.index("Aesthetic"),
+        horizontal=True, label_visibility="collapsed",
+    )
+    tone = TONES[vibe_labels.index(chosen)]
+    tags_per = st.slider("Hashtags per caption", 0, 10, 3)
 
-st.markdown('<h3 class="section">2 · Add your photo</h3>', unsafe_allow_html=True)
-up_col, prev_col = st.columns([1, 1])
-with up_col:
+with photo_col:
+    st.markdown('<h3 class="section">2 · Add your photo</h3>', unsafe_allow_html=True)
     photo = st.file_uploader(
         "Photo", type=["png", "jpg", "jpeg", "webp"],
         help="Your photo is analyzed in memory and never stored.",
         label_visibility="collapsed",
     )
-with prev_col:
     if photo is not None:
         st.image(photo, caption="Preview", use_container_width=True)
-    else:
-        # Empty-state: quick "how it works" strip, beside the uploader.
-        st.markdown(
-            """
-            <div class="steps">
-              <div class="step"><div class="n">📸</div><div class="t">Upload</div>
-                <div class="d">Drop in any photo</div></div>
-              <div class="step"><div class="n">🎨</div><div class="t">Pick a vibe</div>
-                <div class="d">Six moods to match</div></div>
-              <div class="step"><div class="n">✨</div><div class="t">Get captions</div>
-                <div class="d">Post-ready + hashtags</div></div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
 
 go = st.button("✨ Generate captions", disabled=(photo is None))
 
