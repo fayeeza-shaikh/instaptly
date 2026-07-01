@@ -54,10 +54,9 @@ VIBE_EMOJI = {
 st.set_page_config(page_title="Instaptly", page_icon="✨", layout="centered")
 
 st.markdown(
-    """
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
+"""
+<style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
       :root { --coral:#FF5E62; --peach:#FF9966; --gold:#FFD166;
               --ink:#2B2D42; --cream:#FFF3EC; }
 
