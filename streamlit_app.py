@@ -104,8 +104,11 @@ st.markdown(
       .stButton>button:hover:enabled { filter:brightness(1.06); transform:translateY(-1px); }
       .stButton>button:disabled { opacity:.5; }
 
-      /* Vibe chips (radio) */
-      div[role="radiogroup"] { gap:8px; flex-wrap:wrap; }
+      /* Vibe chips (radio) — force a horizontal, wrapping row */
+      div[role="radiogroup"] {
+          display:flex !important; flex-direction:row !important;
+          flex-wrap:wrap; gap:8px; align-items:center;
+      }
       div[role="radiogroup"] label {
           background:white; border:1.5px solid #ffdcc9; border-radius:999px;
           padding:6px 15px; cursor:pointer; transition:.15s; font-weight:600;
