@@ -104,15 +104,16 @@ st.markdown(
       .stButton>button:hover:enabled { filter:brightness(1.06); transform:translateY(-1px); }
       .stButton>button:disabled { opacity:.5; }
 
-      /* Vibe chips (radio) — force a horizontal, wrapping row */
+      /* Vibe chips (radio) — force a single horizontal row, no wrapping */
       div[role="radiogroup"] {
           display:flex !important; flex-direction:row !important;
-          flex-wrap:wrap; gap:8px; align-items:center;
+          flex-wrap:nowrap !important; gap:7px; align-items:center;
+          overflow-x:auto; padding-bottom:4px;
       }
       div[role="radiogroup"] label {
           background:white; border:1.5px solid #ffdcc9; border-radius:999px;
-          padding:6px 15px; cursor:pointer; transition:.15s; font-weight:600;
-          color:var(--ink);
+          padding:5px 12px; cursor:pointer; transition:.15s; font-weight:600;
+          color:var(--ink); white-space:nowrap; flex:0 0 auto;
       }
       div[role="radiogroup"] label:hover { border-color:var(--peach); }
       div[role="radiogroup"] label:has(input:checked) {
