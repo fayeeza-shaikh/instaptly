@@ -2,3 +2,6 @@
 __pycache__/
 *.pyc
 .vscode/
+
+# Streamlit secrets — never commit your API key
+.streamlit/secrets.toml
